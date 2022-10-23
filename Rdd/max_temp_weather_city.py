@@ -2,8 +2,8 @@ from pyspark import SparkContext
 
 sc = SparkContext(master="local", appName="MaxTempCity")
 
-weather_rdd = sc.textFile("E:\Spark\Pratice\Rdd\inputData\weather.csv")
-zips_rdd = sc.textFile("E:\Spark\Pratice\Rdd\inputData\zips_city.csv")
+weather_rdd = sc.textFile("./inputData/weather.csv")
+zips_rdd = sc.textFile("./inputData/zips_city.csv")
 
 def get_zip_codes_max_temp(lines):
     _, zip_code, temp = lines.split(",")
