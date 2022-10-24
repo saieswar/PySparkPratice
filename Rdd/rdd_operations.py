@@ -1,6 +1,4 @@
 
-
-
 from pyspark import SparkContext
 
 sc = SparkContext(appName="rddOps", master='local')

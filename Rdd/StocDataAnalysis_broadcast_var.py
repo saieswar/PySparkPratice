@@ -37,7 +37,7 @@ def getParsedDividendRecord(record):
 
 def getDiffAndDividends(daily_pair_iter):
     """
-    Genereates close price and open price for the exchange on given date along with dividend
+    Genereates difference of close and open price for the exchange on given date along with dividend.
     :param nyse_daily_rdd:
     :return: exchange, symbol, date, price_diff, dividend
     """
