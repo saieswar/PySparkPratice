@@ -3,6 +3,7 @@
 # Gender type
 # Age Group and Gender
 from pyspark import SparkContext
+from pyspark.storagelevel import StorageLevel
 
 sc = SparkContext(master="local", appName="Health Care Analytics")
 
@@ -38,6 +39,11 @@ def getNumofStrokesAndTotalParticipation(x,y):
     return(stroke_count, total_count) #returning as tuple, so that next iteration x is tuple y is next val
 
 def getPercentagePerKey(work_type_and_stroke_person_pair):
+    """
+    Returns percentage for each record which is computed
+    :param work_type_and_stroke_person_pair:
+    :return:
+    """
     work_type, stroke_person_pair = work_type_and_stroke_person_pair #tuple work_tyoe, (stroke_count, total_count)
     if isinstance(stroke_person_pair, tuple):
         stroke, total_person_count = stroke_person_pair # extractinhgstorke, total_count
@@ -49,14 +55,15 @@ def getPercentagePerKey(work_type_and_stroke_person_pair):
 #
 health_data_rdd = sc.textFile("./inputData/healthcare_dataset_stroke_data.csv")
 header = health_data_rdd.first()
-data_with_out_header_rdd = health_data_rdd.filter( lambda x: x != header)
+#removing Header and caching the RDD of health data
+data_with_out_header_rdd = health_data_rdd.filter( lambda x: x != header).persist(storageLevel=StorageLevel.MEMORY_ONLY)
 work_stroke = data_with_out_header_rdd.map(work_type_stroke)\
     .reduceByKey(getNumofStrokesAndTotalParticipation)\
     .map(getPercentagePerKey)
-
+print("************** Analysis on the role of Work Type on Stroke ****************")
 for result in work_stroke.collect():
     print(result)
-print(work_stroke)
+
 
 # Analysis on the role of gender on stroke
 
@@ -69,8 +76,40 @@ def get_gender_stroke(health_record):
 gender_stroke_results = data_with_out_header_rdd.map(get_gender_stroke)\
     .reduceByKey(getNumofStrokesAndTotalParticipation)\
     .map(getPercentagePerKey)
-
+print("************** Analysis on the role of gender on stroke ****************")
 for result in gender_stroke_results.collect():
     print(result)
 
 
+#Analysis on impact of age group and gender on stroke
+
+def getAgeGroup(age):
+    if age < 5:
+        return "kid"
+    elif 5<= age < 13:
+        return "young"
+    elif 13 <= age < 20:
+        return "adsolent"
+    elif 20 <= age < 40:
+        return "adult"
+    elif 40 <= age < 50:
+        return "Midage"
+    elif 50 <= age < 60:
+        return "senior"
+    else:
+        return "old"
+
+def getAgeGroupAndStroke(record):
+    record_list = record.split(",")
+    age_group = getAgeGroup(float(record_list[2]))
+    gender = str(record_list[1])
+    stroke = int(record_list[11])
+    return ((age_group, gender), stroke)
+
+age_group_gender_results = data_with_out_header_rdd\
+    .map(getAgeGroupAndStroke)\
+    .reduceByKey(getNumofStrokesAndTotalParticipation)\
+    .map(getPercentagePerKey)
+print("*********** Analysis on impact of age group and gender on stroke ************")
+for result in age_group_gender_results.collect():
+    print(result)
