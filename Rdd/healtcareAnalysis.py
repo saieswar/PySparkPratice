@@ -8,7 +8,7 @@ sc = SparkContext(master="local", appName="Health Care Analytics")
 
 def work_type_stroke(health_data):
     health_data_list = health_data.split(",")
-    work_type = health_data_list[6]
+    work_type = str(health_data_list[6])
     stroke = int(health_data_list[11])
     return (work_type, stroke)
 
