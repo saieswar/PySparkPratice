@@ -24,4 +24,4 @@ def get_increment(sal, bonus, state):
 
 increment_udf = udf(lambda x,y,z : get_increment(x,y,z), DoubleType())
 
-print(df.withColumn("increment", increment_udf(df.salary, df.bonus, df.state) ).show())
+print(df.withColumn("increment", increment_udf(df.salary, df.bonus, df.state)).show())
