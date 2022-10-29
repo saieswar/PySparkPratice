@@ -76,6 +76,8 @@ def get_gender_stroke(health_record):
 gender_stroke_results = data_with_out_header_rdd.map(get_gender_stroke)\
     .reduceByKey(getNumofStrokesAndTotalParticipation)\
     .map(getPercentagePerKey)
+
+
 print("************** Analysis on the role of gender on stroke ****************")
 for result in gender_stroke_results.collect():
     print(result)
