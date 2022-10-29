@@ -12,6 +12,6 @@ print(df1.show())
 print(df.rdd.getNumPartitions())
 
 df1.write.options(header=True).csv("./output/students")
-overwrite, #appernf, #ignore, #error
+#overwrite, #appernf, #ignore, #error
 
 print(spark.read.csv("./output/students/").show())

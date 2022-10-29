@@ -1,0 +1,13 @@
+course,gender,sum(marks)
+DB,Female,4197
+Cloud,Female,6316
+PF,Male,5960
+DSA,Male,4826
+MVC,Male,5241
+OOP,Male,4234
+DSA,Female,6124
+DB,Male,5073
+MVC,Female,4344
+PF,Female,3973
+OOP,Female,4682
+Cloud,Male,5127
