@@ -21,7 +21,7 @@ driver ="org.postgresql.Driver"
 url = "jdbc:postgresql://database-1.csnl2hd7himeew32.ap-northeast-1.rds43.amazonaws.com/"
 table = "pyspark_aws.word_count"
 user = 'ENV["user"]'
-password = 'ENV['pwd']''
+password = 'ENV["pwd"]'
 
 words_DF.write.format("jdbc").option("driver", driver).option("url", url).option("dbtable", table).option("mode", "append")\
     .option("user", user).option("password", password).save()
